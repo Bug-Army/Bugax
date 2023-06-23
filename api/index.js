@@ -3,10 +3,12 @@ const cors = require('cors');
 const User = require('./models/User.js');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
+const jwtSecret = 'faseframeasodjasodko';
 
 app.use(express.json());
 
@@ -36,11 +38,20 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const userDoc = await User.findOne({ email: email });
+    const userDoc = await User.findOne({ email });
     if (userDoc) {
-        res.json(userDoc);
-    }else{
-        return res.status(401).json({ message: 'Invalid Credentials' });
+        const passOk = bcrypt.compareSync(password, userDoc.password);
+        if (passOk) {
+            jwt.sign({email: userDoc.email, id:userDoc._id}, jwtSecret, {}, (err,token) =>{
+                if (err) throw err;
+                res.cookie('token', token).json('userDoc');
+            });
+            res.cookie('token', '').json('pass ok');
+        } else {
+            res.status(422).json('pass not ok');
+        }
+    } else {
+        res.status(401).json({ message: 'Credenciales Invalidas' });
     }
 });
 
