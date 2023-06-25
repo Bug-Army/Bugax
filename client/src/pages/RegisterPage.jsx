@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -7,6 +8,7 @@ export default function RegisterPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [redirect, setRedirect] = useState(false);
     async function registerUser(ev) {
         ev.preventDefault();
         try {
@@ -16,10 +18,17 @@ export default function RegisterPage() {
                 password: password,
             });
             alert('Registration Successful');
+            setRedirect(true);
+            
         } catch (err) {
             alert('Registration Failed');
         }
     }
+
+    if (redirect) {
+        return <Navigate to={'/login'} />
+    }
+
     //################################################################
     return (
         <div className=" relative w-screen h-screen flex justify-center items-center">

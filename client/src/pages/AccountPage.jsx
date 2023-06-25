@@ -17,20 +17,22 @@ export default function AccountPage() {
         setRedirect('/');
         setUser(null);
     }
-
+    //PANTALLA DE CARGANDO...
     if (!ready) {
         return 'Cargando...';
     }
-
+    //SI NO ESTA LOGEADO, PAL LOGGIN
     if (ready && !user && !redirect) {
         return <Navigate to={'/login'} />
     }
-
+    //BOTONES DE MI CUENTA, MIS RESERVAS Y MIS ALOJAMIENTOS
     function linkClasses(type = null) {
-        let classes = 'inline-flex gap-1 py-2 px-6 rounded-full';
+        let classes = 'inline-flex gap-1 py-2 px-6';
         if (type === subpage) {
-            classes += ' bg-violet-500 text-white';
+            //COLOR DE FONDO DE BOTON SELECCIONADO
+            classes += ' bg-indigo-500 text-white';
         } else {
+            //COLOR DE FONDO DE BOTON NO SELECCIONADO
             classes += ' bg-gray-100';
         }
         return classes;
@@ -41,7 +43,7 @@ export default function AccountPage() {
     }
 
     return (
-        <div>
+        <div className="grow bg-slate-200">
             <nav className="w-full flex justify-center mt-8 gap-2 mb-8">
                 <Link className={linkClasses('profile')} to={'/account'}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

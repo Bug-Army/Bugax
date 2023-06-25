@@ -106,6 +106,6 @@ app.post('/upload', photosMiddleware.array('fotos', 100), (req, res) => {
     }
     res.json(uploadedFiles);
 });
-console.log("everthing alr");
+console.log("todo joya pa");
 
 app.listen(4000); 
