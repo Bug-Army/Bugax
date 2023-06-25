@@ -8,7 +8,6 @@ export default function PlacesPage() {
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
-    const [photoLink, setPhotoLink] = useState('');
     const [description, setDescription] = useState('');
     const [perks, setPerks] = useState([]);
     const [extraInfo, setExtraInfo] = useState('');
@@ -37,15 +36,7 @@ export default function PlacesPage() {
             </>
         );
     }
-    //funcion que recoge links y los descarga a /api/uploads
-    async function addPhotoByLink(ev) {
-        ev.preventDefault();
-        const { data: filename } = await axios.post('/upload-by-link', { link: photoLink })
-        setAddedPhotos(prev => {
-            return [...prev, filename];
-        });
-        setPhotoLink('');
-    }
+
 
     return (
         <div>
@@ -63,29 +54,10 @@ export default function PlacesPage() {
                 <div>
                     <form>
                         {preInput('Titulo', 'Titulo para tu publicacion')}
-                        <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="casa de chapa ubicada en el centro de la villa" />
+                        <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="Ej: Cabañas en San Rafael" />
                         {preInput('Direccion', 'Direccion de tu alojamiento')}
-                        <input type="text" value={address} onChange={ev => setAddress(ev.target.value)} placeholder="direccion" />
+                        <input type="text" value={address} onChange={ev => setAddress(ev.target.value)} placeholder="Ej: Calle 4444 Barrio " />
                         {preInput('Fotos', 'Añade algunas fotos del lugar que vas a publicar')}
-                        <div className="flex gap-2">
-                            <input value={photoLink}
-                                onChange={ev => setPhotoLink(ev.target.value)}
-                                type="text" placeholder={"Añadir con un enlace"} />
-                            <button onClick={addPhotoByLink} className="bg-gray-200 px-4 rounded-2xl">Añadir&nbsp;foto</button>
-                        </div>
-                        <div className="mt-2 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                            {addedPhotos.length > 0 && addedPhotos.map(link => (
-                                <div>
-                                    {link}
-                                </div>
-                            ))}
-                            <button className="flex gap-1 justify-center border bg-transparent rounded-2xl p-8 text-2xl text-gray-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                                </svg>
-                                Upload
-                            </button>
-                        </div>
                         {preInput('Descripcion', 'Descripcion del alojamiento')}
                         <textarea value={description} onChange={ev => setDescription(ev.target.value)} />
                         {preInput('Caracteristicas', 'Seleccione los beneficios que incluye el alojamiento')}
