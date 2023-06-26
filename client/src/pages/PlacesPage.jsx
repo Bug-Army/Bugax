@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import Perks from "../Perks";
+import PhotosUploader from "../PhotosUploader";
 import axios from "axios";
 
 export default function PlacesPage() {
@@ -14,6 +15,7 @@ export default function PlacesPage() {
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
+    const [redirect, setRedirect] = useState('');
 
     //los titulos en funcion
     function inputHeader(text) {
@@ -37,6 +39,20 @@ export default function PlacesPage() {
         );
     }
 
+    async function addNewPlace(ev) {
+        ev.preventDefault();
+        await axios.post('/places', {
+            title, address, addedPhotos,
+            description, perks, extraInfo,
+            checkIn, checkOut, maxGuests
+        });
+        setRedirect('/account/places');
+    }
+
+    if (redirect) {
+        return <Navigate to={redirect} />
+    }
+
 
     return (
         <div>
@@ -53,12 +69,13 @@ export default function PlacesPage() {
             )}
             {action === 'new' && (
                 <div>
-                    <form>
+                    <form onSubmit={addNewPlace}>
                         {preInput('Titulo', 'Titulo para tu publicacion')}
                         <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="Ej: Cabañas en San Rafael" />
                         {preInput('Direccion', 'Direccion de tu alojamiento')}
                         <input type="text" value={address} onChange={ev => setAddress(ev.target.value)} placeholder="Ej: Calle 4444 Barrio " />
                         {preInput('Fotos', 'Añade algunas fotos del lugar que vas a publicar')}
+                        <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
                         {preInput('Descripcion', 'Descripcion del alojamiento')}
                         <textarea value={description} onChange={ev => setDescription(ev.target.value)} />
                         {preInput('Caracteristicas', 'Seleccione los beneficios que incluye el alojamiento')}

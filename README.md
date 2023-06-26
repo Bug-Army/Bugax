@@ -2,7 +2,7 @@
 Drive de Proyecto Gestor de Reservas
 https://drive.google.com/drive/u/2/folders/19kwzwdkLiKxE1npZEKIG3zCZaguVHbgs
 <p>
-https://youtu.be/MpQbwtSiZ7E?t=13069
+https://youtu.be/MpQbwtSiZ7E?t=13734
   ##
   <div align="center">
  Lenguajes Utilizados
