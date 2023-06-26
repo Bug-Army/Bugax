@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const User = require('./models/User.js');
-const Place = require('.models/Place.js');
+const Place = require('./models/Place.js');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -107,6 +107,7 @@ app.post('/upload', photosMiddleware.array('fotos', 100), (req, res) => {
     }
     res.json(uploadedFiles);
 });
+
 
 app.post('/places', (req, res) => {
     const { token } = req.cookies;
