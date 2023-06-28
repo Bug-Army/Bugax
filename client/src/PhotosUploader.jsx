@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import PropTypes from "prop-types";
+
 
 export default function PhotosUploader({ addedPhotos, onChange }) {
     //funcion que recoge links
@@ -18,7 +18,9 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
         const files = ev.target.files;
         const data = new FormData();
         for (let i = 0; i < files.lenght; i++) {
-            data.append('fotos', files[i]);
+            //el preciso momento donde lo arregla
+            //https://youtu.be/MpQbwtSiZ7E?t=12002
+            data.append('photos', files[i]);
         }
         axios.post('/upload', data, {
             headers: { 'Content-type': 'multipart/form-data' }
@@ -56,8 +58,3 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
         </>
     );
 }
-
-    PhotosUploader.propTypes = {
-        addedPhotos: PropTypes.array.isRequired,
-        onChange: PropTypes.func.isRequired,
-    }

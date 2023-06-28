@@ -51,3 +51,10 @@ img.mainLogo:hover {
     @apply shadow-[box_0px_1px_4px_0px] shadow-blue-200;
 }
 
+/* PerkList */
+.perkListContainer {
+    @apply border-2 w-screen grow px-3 gap-3 border-black;
+}
+.perkList {
+    @apply border border-blue-500 w-[30%] shadow-inner shadow-blue-300 py-2 px-3 text-red-500 flex rounded-none gap-2 items-center cursor-pointer;
+}
