@@ -1,10 +1,12 @@
 import PhotosUploader from "../PhotosUploader";
 import Perks from "../Perks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import AccountNav from "../AccountNav";
+import { Navigate, useParams } from "react-router-dom";
 
 export default function PlacesFormPage() {
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
@@ -14,6 +16,24 @@ export default function PlacesFormPage() {
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
+    const [redirect, setRedirect] = useState(false);
+    useEffect(() => {
+        if (!id) {
+            return;
+        }
+        axios.get('/places/' + id).then(response => {
+            const { data } = response;
+            setTitle(data.title);
+            setAddress(data.address)
+            setAddedPhotos(data.photos);
+            setDescription(data.description);
+            setPerks(data.perks);
+            setExtraInfo(data.extraInfo);
+            setCheckIn(data.checkIn);
+            setCheckOut(data.checkOut);
+            setMaxGuests(data.maxGuests);
+        });
+    }, [id]);
     //los titulos en funcion
     function inputHeader(text) {
         return (
@@ -36,57 +56,118 @@ export default function PlacesFormPage() {
         );
     }
 
-    async function addNewPlace(ev) {
+    async function savePlace(ev) {
         ev.preventDefault();
+        const placeData = {
+            title, address, addedPhotos,
+            description, perks, extraInfo,
+            checkIn, checkOut, maxGuests
+        };
+        if (id) {
+            //update
+            await axios.put('/places/', {
+                id, ...placeData
+            });
+            setRedirect(true);
+        } else {
+            //new place
+            await axios.post('/places', placeData);
+            setRedirect(true);
+        }
         await axios.post('/places', {
             title, address, addedPhotos,
             description, perks, extraInfo,
             checkIn, checkOut, maxGuests
         });
+        setRedirect(true);
     }
+
+    if (redirect) {
+        return <Navigate to={'/account/places'} />
+    }
+
     return (
-        <div className="p-2 bg-gray-200 w-screen left-0 right-0">
+        <div className="places-cont px-[10%] bg-gray-200 overflow-hidden pb-5">
             <AccountNav />
-            <form onSubmit={addNewPlace}>
-                {preInput('Titulo', 'Titulo para tu publicacion')}
-                <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="Ej: Cabañas en San Rafael" />
-                {preInput('Direccion', 'Direccion de tu alojamiento')}
-                <input type="text" value={address} onChange={ev => setAddress(ev.target.value)} placeholder="Ej: Calle 4444 Barrio " />
+            <form onSubmit={savePlace} className="w-[100%] place-items-center">
+                <div className="flex justify-between">
+                    {/* Titulo */}
+                    <div className="formatForm">
+                        {preInput('Titulo', 'Titulo para tu publicacion')}
+                        <input type="text" className="Places"
+                            value={title}
+                            onChange={ev => setTitle(ev.target.value)}
+                            placeholder="Ej: Cabañas en San Rafael" />
+                    </div>
+
+                    {/* Direccion */}
+                    <div className="formatForm">
+                        {preInput('Direccion', 'Direccion de tu alojamiento')}
+                        <input type="text" className="Places"
+                            value={address}
+                            onChange={ev => setAddress(ev.target.value)}
+                            placeholder="Ej: Calle 4444 Barrio " />
+                    </div>
+                    {/* Descripcion */}
+
+                    <div className="formatForm">
+                        {preInput('Descripcion', 'Descripcion del alojamiento')}
+                        <input type="text" className="Places"
+                            value={description}
+                            onChange={ev => setDescription(ev.target.value)} />
+                    </div>
+                </div>
+
+                {/* Fotos */}
+
                 {preInput('Fotos', 'Añade algunas fotos del lugar que vas a publicar')}
                 <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-                {preInput('Descripcion', 'Descripcion del alojamiento')}
-                <textarea value={description} onChange={ev => setDescription(ev.target.value)} />
+
+                {/* Perks */}
+
                 {preInput('Caracteristicas', 'Seleccione los beneficios que incluye el alojamiento')}
-                <div className="perkListContainer">
+                <div className="perkListContainer [&>.item:has(~.item:hover)]:border-violet-700">
                     <Perks selected={perks} onChange={setPerks} />
                 </div>
+
+                {/* Detalle */}
+
                 {preInput('Informacion adicional', 'Agregue una descripcion detallada')}
-                <textarea value={extraInfo} onChange={ev => setExtraInfo(ev.target.value)} />
-                {preInput('Horarios de Entrada/Salida', 'Agregue un horario de entrada y salida del alojamiento')}
-                <div className="grid gap-2 sm:grid-col-3">
-                    <p className="text-gray-500 text-sm">Use el formato de horario 24h para evitar confusiones</p>
-                    <div>
-                        <h3 className="mt-2 -mb-1">Horario de entrada</h3>
-                        <input type="text"
-                            value={checkIn}
-                            onChange={ev => setCheckIn(ev.target.value)}
-                            placeholder="04" />
-                    </div>
-                    <div>
-                        <h3 className="mt-2 -mb-1">Horario de salida</h3>
-                        <input type="text"
-                            value={checkOut}
-                            onChange={ev => setCheckOut(ev.target.value)}
-                            placeholder="11" />
-                    </div>
-                    <div>
-                        <h3 className="mt-2 -mb-1">Maxima cantidad de huespedes</h3>
-                        <input type="number"
-                            value={maxGuests}
-                            onChange={ev => setMaxGuests(ev.target.value)} />
+                <input type="text" className="Places"
+                    onChange={ev => setExtraInfo(ev.target.value)} />
+
+                {/* Horarios - Huesped */}
+                <div className="horarios-huespedesContainer mt-5 mb-3 w-full">
+                    <div className="horarios flex justify-between text-center text-gray-500">
+                        {/* {preInput('Horarios de Entrada/Salida', 'Agregue un horario de entrada y salida del alojamiento')} */}
+                        {/* <div className="grid gap-2 sm:grid-col-3"> */}
+                            {/* <p className="text-gray-500 text-sm">Use el formato de horario 24h para evitar confusiones</p> */}
+                            <div className=" flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de entrada</h3>
+                                <input type="number" min={0} max={23} className="item hourInputs self-center"
+                                    value={checkIn}
+                                    onChange={ev => setCheckIn(ev.target.value)}
+                                    placeholder="04" />                                
+                            </div>
+                            <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de salida</h3>
+                                <input type="number" min={0} max={23} className="item hourInputs self-center"
+                                    value={checkOut}
+                                    onChange={ev => setCheckOut(ev.target.value)}
+                                    placeholder="11" />
+                            </div>
+
+
+                            <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Maxima cantidad de huespedes</h3>
+                                <input type="number" min={0} max={50} className="item hourInputs self-center"
+                                    value={maxGuests}
+                                    onChange={ev => setMaxGuests(ev.target.value)} />
+                            </div>
+                        {/* </div> */}
                     </div>
                 </div>
-                <button className="primary my-4">Guardar</button>
+                <button className="self-center">Guardar</button>
             </form>
         </div>
     );

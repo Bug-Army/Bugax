@@ -24,6 +24,7 @@ function App() {
           <Route path="/account" element={<ProfilePage />} />
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlacesFormPage />} />
+          <Route path="/account/places/:id" element={<PlacesFormPage />} />
           <Route path="/aboutus" element={<AboutusPage />} />
           <Route path="/not_found" element={<NotFound />} />
           <Route path="*" element={<Navigate to='/not_found' />} />

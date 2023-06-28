@@ -33,7 +33,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="grow bg-slate-200">
+        <div className="grow bg-gray-200">
             <AccountNav />
             {subpage === 'profile' && (
                 <div className="text-center max-w-lg mx-auto">

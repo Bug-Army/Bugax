@@ -2,20 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
-textarea {
-    @apply w-full border-b border-blue-900 mb-3 my-1 py-2 px-3 ml-2 pr-40 bg-transparent text-gray-300;
+input.textRegister {
+    @apply w-full border-b border-blue-900 mb-3 my-1 py-2 px-3 ml-2 bg-transparent text-gray-300;
     @apply bg-gradient-to-t from-blue-500 via-transparent via-20% to-transparent;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-textarea:focus {
+input.textRegister:focus {
     @apply shadow-[inset_0px_-9px_10px_-10px] border-b border-violet-700 outline-none shadow-violet-400 !important;
     @apply bg-gradient-to-t from-violet-500 via-transparent via-20% to-transparent;
 }
@@ -53,8 +45,40 @@ img.mainLogo:hover {
 
 /* PerkList */
 .perkListContainer {
-    @apply grid grid-rows-4 grid-flow-col border-2 grow px-3 gap-3 border-black;
+    @apply grid grid-rows-3 grid-flow-col justify-between p-2 gap-3;
 }
 .perkList {
-    @apply border border-blue-500 w-[30%] shadow-inner shadow-blue-300 py-2 px-3 text-red-500 flex rounded-none gap-2 items-center cursor-pointer;
+    @apply overflow-hidden w-[350px] select-none border border-blue-300 py-2 px-0 text-center justify-start pl-2 text-gray-500 flex rounded-none gap-2 items-center cursor-pointer;
+}
+
+input.Places{
+    @apply border-b-2 border-blue-300 w-full text-black bg-transparent;
+}
+input.Places:focus {
+    @apply outline-none overflow-hidden border-violet-700 shadow-[inset_0px_-9px_10px_-10px] shadow-blue-300;
+}
+
+perkList:focus {
+    @apply bg-blue-500;
+}
+div.formatForm{
+    @apply w-[33%] px-2 text-center gap-4;
+}
+
+/* Horarios Entrada / Salida / Wespedes */
+
+input.hourInputs{
+    @apply border-2 border-blue-300 text-center w-[15%] text-black bg-transparent;
+}
+input.hourInputs:focus {
+    @apply outline-none overflow-hidden border-violet-700 shadow-[inset_0px_-9px_10px_-10px] shadow-blue-300;
+}
+
+input.hourInputs:hover h3.uwu{
+    @apply border-red-500;
+}
+@layer components{
+    .perkList:has(input:checked){
+        @apply border-violet-700 shadow-[inset_0px_-9px_10px_-10px] shadow-violet-500;
+    }
 }

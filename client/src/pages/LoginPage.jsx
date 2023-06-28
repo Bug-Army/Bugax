@@ -28,7 +28,7 @@ export default function LoginPage() {
 
     //#################################################################
     return (
-        <div className=" relative w-screen h-screen flex justify-center items-center">
+        <div className="bg-gray-200 relative w-screen h-screen flex justify-center items-center">
             <div className=" flex justify-center bg-[url('../../resources/images/bg_blur.jpg')] bg-cover  z-[-1] absolute top-0 left-0 right-0 bottom-0" />
             <div className="flex justify-between place-items-start shadow-[0px_0px_20px_1px] shadow-blue-800 bg-[url('../../resources/images/bg_register.jpg')] bg-cover w-[75%] h-[75%]">
             <Link to={'/'} className="text-center flex items-center py-5 px-10">
@@ -38,11 +38,11 @@ export default function LoginPage() {
                 <div className="loginbar h-[100%] pt-[10%] border-l border-blue-500 shadow-[-15px_2px_19px_-9px] shadow-blue-600 overflow-hidden bg-black bg-opacity-40 backdrop-blur-sm">
                     <h1 className="text-4xl p-4 text-left -mt-14 text-gray-300 mb-[15%] ">Iniciar Sesión</h1>
                     <form className="max-w-sm mr-3.5 text-center " onSubmit={handleLoginSubmit}>
-                        <input type="email"
+                        <input type="email" className="textRegister"
                             placeholder="bugax@email.com"
                             value={email}
                             onChange={ev => setEmail(ev.target.value)} />
-                        <input type="password"
+                        <input type="password" className="textRegister"
                             placeholder="Contraseña"
                             value={password}
                             onChange={ev => setPassword(ev.target.value)} />

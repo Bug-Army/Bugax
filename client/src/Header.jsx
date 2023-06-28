@@ -5,20 +5,20 @@ import { UserContext } from "./UserContext.jsx";
 export default function Header() {
     const { user } = useContext(UserContext);
     return (
-        <header className="w-screen z-[1] bg-gray-100 aspect-auto">
-            <div className="mainNav flex left-0 justify-between px-4 top-0 w-screen border-b border-transparent items-center">
+        <header className="z-[15] border-b border-blue-300 bg-neutral-900 aspect-auto overflow-hidden">
+            <div className="mainNav flex left-0 right-0 shadow shadow-red-300 justify-between px-4 top-0 w-screen border-b border-transparent items-center">
                 {/* LOGO */}
                 <Link to={'/'} className='flex self-center'>
-                    <img src="/resources/images/Bugax_logo_v1.8.png" alt="logo" className="mainLogo logoHover self-start align-middle" />
-                    <span className="font-bold text-xl self-center">Bugax</span>
+                    <img src="/resources/images/Bugax_logo_v1.8_blanco.png" alt="logo" className="mainLogo logoHover self-start align-middle" />
+                    <span className="font-bold text-white text-xl self-center">Bugax</span>
                 </Link>
                 {/* NAVBAR */}
                 <div className="flex self-center justify-center gap-5 grow-0 xl:grow align-middle items-center pointer-events-auto text-l xl:text-sm 2xl:text-base">
-                    <Link to={"/"} className="text-black">Descubrir</Link>
+                    <Link to={"/"} className="text-white">Descubrir</Link>
                     <div className='border-l self-stretch border-blue-300'></div>
-                    <Link to={"/account/bookings"} className="text-black">Mis reservas</Link>
+                    <Link to={"/account/bookings"} className="text-white">Mis reservas</Link>
                     <div className='border-l self-stretch border-blue-300'></div>
-                    <Link to={"/account/places"} className="text-black">Mis alojamientos</Link>
+                    <Link to={"/account/places"} className="text-white">Mis alojamientos</Link>
                     {/* LUPA */}
                     <button className='bg-transparent text-blue-400 p-1 '>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 25" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -53,7 +53,6 @@ export default function Header() {
                     </Link>
                 </div>
             </div>
-
         </header>
     );
 }

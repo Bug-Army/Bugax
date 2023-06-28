@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-
+import PropTypes from "prop-types";
 
 export default function PhotosUploader({ addedPhotos, onChange }) {
     //funcion que recoge links
@@ -13,13 +13,10 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
         });
         setPhotoLink('');
     }
-
     function uploadPhoto(ev) {
         const files = ev.target.files;
         const data = new FormData();
         for (let i = 0; i < files.lenght; i++) {
-            //el preciso momento donde lo arregla
-            //https://youtu.be/MpQbwtSiZ7E?t=12002
             data.append('photos', files[i]);
         }
         axios.post('/upload', data, {
@@ -34,27 +31,40 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
 
     return (
         <>
-            <div className="flex gap-2">
+            <div className="flex w-full gap-2">
                 <input value={photoLink}
+                    className="Places"
                     onChange={ev => setPhotoLink(ev.target.value)}
-                    type="text" placeholder={"Subir fotos por enlace"} />
+                    type="text"
+                    placeholder={"Subir fotos por enlace"} />
                 {/* BOTON AÑADIR FOTO */}
-                <button onClick={addPhotoByLink} className="bg-indigo-500 text-white px-4">Añadir&nbsp;foto</button>
+                <button onClick={addPhotoByLink} className="bg-indigo-500 h-full py-1 text-white px-4">Añadir&nbsp;foto</button>
             </div>
-            <div className="mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className=" grid p-3 gap-3 rounded-none grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                 {addedPhotos.length > 0 && addedPhotos.map(link => (
-                    <div className="h-32 flex" key={link}>
-                        <img className="rounded-2xl w-full object-cover" src={`http://localhost:4000/uploads/` + link} alt="" />
+                    <div className="h-32 flex relative" key={link}>
+                        <img className="rounded-none border border-blue-300 w-full h-32 object-cover" src={`http://localhost:4000/uploads/` + link} alt="" placeholder="" />
+                        <div className="absolute top-1 right-1 text-sb bg-indigo-600 bg-opacity-50 rounded-full p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
                     </div>
                 ))}
-                <label className="h-32 cursor-pointer flex items-center gap-1 justify-center border bg-transparent rounded-2xl p-2 text-2xl text-gray-600">
+                <label className="cursor-pointer flex items-center  shadow shadow-blue-300 gap-1 h-32 justify-center border border-blue-300 p-3 bg-transparent rounded-none text-xl text-gray-600">
                     <input type="file" multiple className="hidden" onChange={uploadPhoto} />
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                     </svg>
                     Subir fotos
                 </label>
+
             </div>
         </>
     );
+}
+
+PhotosUploader.propTypes = {
+    addedPhotos: PropTypes.array.isRequired,
+    onChange: PropTypes.func.isRequired,
 }
