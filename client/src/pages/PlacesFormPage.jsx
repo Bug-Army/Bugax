@@ -45,7 +45,7 @@ export default function PlacesFormPage() {
         });
     }
     return (
-        <div>
+        <div className="p-2 bg-gray-200 w-screen">
             <AccountNav />
             <form onSubmit={addNewPlace}>
                 {preInput('Titulo', 'Titulo para tu publicacion')}

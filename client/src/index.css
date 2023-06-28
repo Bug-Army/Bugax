@@ -53,7 +53,7 @@ img.mainLogo:hover {
 
 /* PerkList */
 .perkListContainer {
-    @apply border-2 w-screen grow px-3 gap-3 border-black;
+    @apply grid grid-rows-4 grid-flow-col border-2 grow px-3 gap-3 border-black;
 }
 .perkList {
     @apply border border-blue-500 w-[30%] shadow-inner shadow-blue-300 py-2 px-3 text-red-500 flex rounded-none gap-2 items-center cursor-pointer;
