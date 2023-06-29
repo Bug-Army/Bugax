@@ -1,21 +1,31 @@
-import { UserContext } from "../UserContext";
-import { useContext } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import Image from "../Image";
 
 export default function IndexPage() {
-    const { user } = useContext(UserContext);
+    const [places, setPlaces] = useState([]);
+    useEffect(() => {
+        axios.get('/places').then(response => {
+            setPlaces(response.data);
+        });
+    }, []);
     return (
-        // FONDO DE INDEX
-        <div className="grow bg-gray-200">
-            <header className="px-10 py-20">
-                {/* TEXTO */}
-                <div className="font-bold font-sans subpixel-antialiased text-5xl">
-                    {!!user && (
-                        <div className="">
-                            ¿A dónde vas, {user.name}?
-                        </div>
-                    )}
-                </div>
-            </header>
+        <div className="p-8 mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {places.length > 0 && places.map(place => (
+                <Link to={'/place/' + place._id} key="">
+                    <div className="bg-gray-500 mb-2 rounded-2xl flex">
+                        {place.photos?.[0] && (
+                            <Image className="rounded-2xl object-cover aspect-square" src={place.photos?.[0]} alt="" />
+                        )}
+                    </div>
+                    <h2 className="font-bold">{place.address}</h2>
+                    <h3 className="text-sm text-gray-500">{place.title}</h3>
+                    <div className="mt-1">
+                        <span className="font-bold">${place.price}</span> por noche
+                    </div>
+                </Link>
+            ))}
         </div>
     );
 }

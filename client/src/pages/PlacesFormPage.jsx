@@ -16,6 +16,7 @@ export default function PlacesFormPage() {
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
+    const [price, setPrice] = useState(100);
     const [redirect, setRedirect] = useState(false);
     useEffect(() => {
         if (!id) {
@@ -24,7 +25,7 @@ export default function PlacesFormPage() {
         axios.get('/places/' + id).then(response => {
             const { data } = response;
             setTitle(data.title);
-            setAddress(data.address)
+            setAddress(data.address);
             setAddedPhotos(data.photos);
             setDescription(data.description);
             setPerks(data.perks);
@@ -32,6 +33,7 @@ export default function PlacesFormPage() {
             setCheckIn(data.checkIn);
             setCheckOut(data.checkOut);
             setMaxGuests(data.maxGuests);
+            setPrice(data.price);
         });
     }, [id]);
     //los titulos en funcion
@@ -61,25 +63,20 @@ export default function PlacesFormPage() {
         const placeData = {
             title, address, addedPhotos,
             description, perks, extraInfo,
-            checkIn, checkOut, maxGuests
+            checkIn, checkOut, maxGuests, price,
         };
         if (id) {
-            //update
-            await axios.put('/places/', {
+            // actualizar
+            await axios.put('/places', {
                 id, ...placeData
             });
             setRedirect(true);
         } else {
-            //new place
+            // nuevo lugar
             await axios.post('/places', placeData);
             setRedirect(true);
         }
-        await axios.post('/places', {
-            title, address, addedPhotos,
-            description, perks, extraInfo,
-            checkIn, checkOut, maxGuests
-        });
-        setRedirect(true);
+
     }
 
     if (redirect) {
@@ -141,29 +138,36 @@ export default function PlacesFormPage() {
                     <div className="horarios flex justify-between text-center text-gray-500">
                         {/* {preInput('Horarios de Entrada/Salida', 'Agregue un horario de entrada y salida del alojamiento')} */}
                         {/* <div className="grid gap-2 sm:grid-col-3"> */}
-                            {/* <p className="text-gray-500 text-sm">Use el formato de horario 24h para evitar confusiones</p> */}
-                            <div className=" flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
-                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de entrada</h3>
-                                <input type="number" min={0} max={23} className="item hourInputs self-center"
-                                    value={checkIn}
-                                    onChange={ev => setCheckIn(ev.target.value)}
-                                    placeholder="04" />                                
-                            </div>
-                            <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
-                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de salida</h3>
-                                <input type="number" min={0} max={23} className="item hourInputs self-center"
-                                    value={checkOut}
-                                    onChange={ev => setCheckOut(ev.target.value)}
-                                    placeholder="11" />
-                            </div>
+                        {/* <p className="text-gray-500 text-sm">Use el formato de horario 24h para evitar confusiones</p> */}
+                        <div className=" flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                            <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de entrada</h3>
+                            <input type="number" min={0} max={23} className="item hourInputs self-center"
+                                value={checkIn}
+                                onChange={ev => setCheckIn(ev.target.value)}
+                                placeholder="04" />
+                        </div>
+                        <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                            <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Horario de salida</h3>
+                            <input type="number" min={0} max={23} className="item hourInputs self-center"
+                                value={checkOut}
+                                onChange={ev => setCheckOut(ev.target.value)}
+                                placeholder="11" />
+                        </div>
 
 
-                            <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
-                                <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Maxima cantidad de huespedes</h3>
-                                <input type="number" min={0} max={50} className="item hourInputs self-center"
-                                    value={maxGuests}
-                                    onChange={ev => setMaxGuests(ev.target.value)} />
-                            </div>
+                        <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                            <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Maxima cantidad de huespedes</h3>
+                            <input type="number" min={0} max={50} className="item hourInputs self-center"
+                                value={maxGuests}
+                                onChange={ev => setMaxGuests(ev.target.value)} />
+                        </div>
+
+                        <div className="flex justify-start align-middle [&>.item:has(~.item:focus)]:border-violet-700">
+                            <h3 className="item w-[250px] self-center border-b-2 h-[28px] border-blue-300">Precio por noche</h3>
+                            <input type="number" min={0} className="item hourInputs self-center"
+                                value={price}
+                                onChange={ev => setPrice(ev.target.value)} />
+                        </div>
                         {/* </div> */}
                     </div>
                 </div>
